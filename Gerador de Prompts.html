@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Prompts v5.1 - Fábrica de Diálogos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        textarea::-webkit-scrollbar, .scroll-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track, .scroll-container::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        textarea::-webkit-scrollbar-thumb, .scroll-container::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+            border-radius: 10px;
+            border: 2px solid #1f2937;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
+
+    <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-4xl border border-gray-700">
+        
+        <div class="text-center mb-6">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-teal-400">Gerador de Prompts</h1>
+            <p class="text-gray-400 mt-2 font-medium">A Fábrica de Diálogos Virais</p>
+        </div>
+
+        <!-- Creation Mode Toggle -->
+        <div class="mb-6 flex justify-center bg-gray-700 p-1 rounded-lg">
+            <button id="modeRapid" class="w-full py-2 text-sm font-bold rounded-md bg-teal-500 text-gray-900">Modo Rápido</button>
+            <button id="modeAdvanced" class="w-full py-2 text-sm font-bold rounded-md text-gray-300">Modo Avançado</button>
+        </div>
+
+        <!-- Main Form Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-6">
+                <div>
+                    <label for="charName" class="block text-sm font-medium text-gray-300 mb-2">Herói Principal</label>
+                    <input type="text" id="charName" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition" placeholder="Ex: Goku">
+                </div>
+                <div>
+                    <label for="plotType" class="block text-sm font-medium text-gray-300 mb-2">Tipo de Enredo</label>
+                    <select id="plotType" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition">
+                        <option value="aventura">Aventura (Resgate)</option>
+                        <option value="luta">Luta (Superar um poder)</option>
+                        <option value="desafio">Desafio (Obstáculo físico)</option>
+                        <option value="competicao">Competição (Contra um rival)</option>
+                        <option value="misterio">Mistério (Resolver um enigma)</option>
+                        <option value="sacrificio">Sacrifício (Escolha difícil)</option>
+                        <option value="brincadeira">Brincadeira (Algo dá errado)</option>
+                        <option value="meme">Meme (Situação engraçada)</option>
+                    </select>
+                </div>
+                 <!-- Advanced Fields -->
+                <div id="advancedFields" class="space-y-6 hidden">
+                     <div>
+                        <label for="location" class="block text-sm font-medium text-gray-300 mb-2">Localização da Cena</label>
+                        <input type="text" id="location" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition" placeholder="Ex: Planeta Namekusei explodindo">
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <label for="charUniverse" class="block text-sm font-medium text-gray-300 mb-2">Universo do Personagem</label>
+                    <input type="text" id="charUniverse" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition" placeholder="Ex: Dragon Ball">
+                </div>
+                <div>
+                    <label for="emotionalTone" class="block text-sm font-medium text-gray-300 mb-2">Tom Emocional</label>
+                    <select id="emotionalTone" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition">
+                        <option value="epico">Épico / Sério</option>
+                        <option value="comico">Cômico / Engraçado</option>
+                        <option value="emocionante">Emocionante / Comovente</option>
+                        <option value="suspense">Suspense / Tensão</option>
+                    </select>
+                </div>
+                 <!-- Advanced Fields -->
+                <div id="advancedFields2" class="space-y-6 hidden">
+                    <div>
+                        <label for="keyObject" class="block text-sm font-medium text-gray-300 mb-2">Objeto ou Aliado Chave</label>
+                        <input type="text" id="keyObject" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition" placeholder="Ex: As Esferas do Dragão">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+             <button id="surpriseBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Me Surpreenda!</button>
+            <button id="generateBtn" class="w-full bg-teal-500 hover:bg-teal-600 text-gray-900 font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg">Gerar Prompt</button>
+        </div>
+
+        <div id="resultArea" class="mt-8 hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Prompt Result -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-sm font-bold text-teal-400">PROMPT PARA ROTEIRO (DIÁLOGO):</label>
+                        <button id="copyPromptBtn" class="bg-gray-600 hover:bg-gray-700 text-white text-xs font-bold py-1 px-3 rounded-lg transition">Copiar</button>
+                    </div>
+                    <textarea id="promptResult" rows="24" class="w-full bg-gray-900 border border-gray-600 text-gray-300 rounded-lg p-4 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition" readonly></textarea>
+                </div>
+                <!-- Image Prompts -->
+                <div>
+                     <div class="flex justify-between items-center mb-2">
+                        <label class="block text-sm font-bold text-teal-400">PROMPTS DE IMAGEM (ANIME):</label>
+                        <button id="copyImagePromptBtn" class="bg-gray-600 hover:bg-gray-700 text-white text-xs font-bold py-1 px-3 rounded-lg transition">Copiar</button>
+                    </div>
+                    <div id="imagePromptSuggestion" class="text-sm bg-gray-900 p-4 rounded-lg border border-gray-600 h-[460px] overflow-y-auto scroll-container"></div>
+                </div>
+            </div>
+             <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button id="variationBtn" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg transition">Gerar Variação</button>
+                <button id="clearBtn" class="w-full bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-lg transition">Limpar Tudo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const modeRapid = document.getElementById('modeRapid');
+        const modeAdvanced = document.getElementById('modeAdvanced');
+        const advancedFields = document.getElementById('advancedFields');
+        const advancedFields2 = document.getElementById('advancedFields2');
+        const charNameInput = document.getElementById('charName');
+        const charUniverseInput = document.getElementById('charUniverse');
+        const plotTypeSelect = document.getElementById('plotType');
+        const emotionalToneSelect = document.getElementById('emotionalTone');
+        const locationInput = document.getElementById('location');
+        const keyObjectInput = document.getElementById('keyObject');
+        const generateBtn = document.getElementById('generateBtn');
+        const surpriseBtn = document.getElementById('surpriseBtn');
+        const resultArea = document.getElementById('resultArea');
+        const promptResultTextarea = document.getElementById('promptResult');
+        const imagePromptSuggestionDiv = document.getElementById('imagePromptSuggestion');
+        const copyPromptBtn = document.getElementById('copyPromptBtn');
+        const copyImagePromptBtn = document.getElementById('copyImagePromptBtn');
+        const variationBtn = document.getElementById('variationBtn');
+        const clearBtn = document.getElementById('clearBtn');
+
+        // State
+        let lastPromptData = {};
+        let variationCounter = 0;
+        
+        // Surprise Data
+        const surpriseData = [
+            { name: 'Pikachu', universe: 'Pokémon', plot: 'aventura', tone: 'emocionante'},
+            { name: 'Goku', universe: 'Dragon Ball', plot: 'luta', tone: 'epico'},
+            { name: 'Homem-Aranha', universe: 'Marvel', plot: 'sacrificio', tone: 'emocionante'},
+            { name: 'Naruto', universe: 'Naruto', plot: 'competicao', tone: 'epico'},
+            { name: 'Luffy', universe: 'One Piece', plot: 'desafio', tone: 'comico'},
+            { name: 'Superman', universe: 'DC', plot: 'desafio', tone: 'epico'},
+        ];
+
+        // Event Listeners
+        modeRapid.addEventListener('click', () => toggleMode(true));
+        modeAdvanced.addEventListener('click', () => toggleMode(false));
+
+        function toggleMode(isRapid) {
+            if (isRapid) {
+                modeRapid.classList.add('bg-teal-500', 'text-gray-900');
+                modeRapid.classList.remove('text-gray-300');
+                modeAdvanced.classList.remove('bg-teal-500', 'text-gray-900');
+                modeAdvanced.classList.add('text-gray-300');
+                advancedFields.classList.add('hidden');
+                advancedFields2.classList.add('hidden');
+            } else {
+                modeAdvanced.classList.add('bg-teal-500', 'text-gray-900');
+                modeAdvanced.classList.remove('text-gray-300');
+                modeRapid.classList.remove('bg-teal-500', 'text-gray-900');
+                modeRapid.classList.add('text-gray-300');
+                advancedFields.classList.remove('hidden');
+                advancedFields2.classList.remove('hidden');
+            }
+        }
+
+        generateBtn.addEventListener('click', () => {
+            if (!charNameInput.value.trim() || !charUniverseInput.value.trim()) {
+                generateBtn.textContent = 'Preencha Herói e Universo!';
+                setTimeout(() => { generateBtn.textContent = 'Gerar Prompt'; }, 2000);
+                return;
+            }
+            lastPromptData = collectInputs();
+            lastPromptData.variation = 'original';
+            variationCounter = 0;
+            updateUI();
+        });
+        
+        surpriseBtn.addEventListener('click', () => {
+            const randomData = surpriseData[Math.floor(Math.random() * surpriseData.length)];
+            charNameInput.value = randomData.name;
+            charUniverseInput.value = randomData.universe;
+            plotTypeSelect.value = randomData.plot;
+            emotionalToneSelect.value = randomData.tone;
+            locationInput.value = '';
+            keyObjectInput.value = '';
+            generateBtn.click();
+        });
+
+        variationBtn.addEventListener('click', () => {
+            const variations = ['twist', 'toneShift', 'coStar'];
+            lastPromptData.variation = variations[variationCounter % variations.length];
+            updateUI();
+            variationCounter++;
+        });
+        
+        clearBtn.addEventListener('click', () => {
+            const inputs = [charNameInput, charUniverseInput, locationInput, keyObjectInput];
+            inputs.forEach(i => i.value = '');
+            plotTypeSelect.selectedIndex = 0;
+            emotionalToneSelect.selectedIndex = 0;
+            resultArea.classList.add('hidden');
+        });
+
+        // Copy functionality
+        copyPromptBtn.addEventListener('click', () => copyToClipboard(promptResultTextarea.value, copyPromptBtn));
+        copyImagePromptBtn.addEventListener('click', () => copyToClipboard(imagePromptSuggestionDiv.innerText, copyImagePromptBtn));
+
+        // Helper Functions
+        function collectInputs() {
+            return {
+                charName: charNameInput.value.trim(),
+                charUniverse: charUniverseInput.value.trim(),
+                plotType: plotTypeSelect.value,
+                emotionalTone: emotionalToneSelect.value,
+                location: locationInput.value.trim(),
+                keyObject: keyObjectInput.value.trim(),
+            };
+        }
+
+        function updateUI() {
+            promptResultTextarea.value = generatePromptText(lastPromptData);
+            imagePromptSuggestionDiv.innerHTML = generateImagePrompt(lastPromptData);
+            resultArea.classList.remove('hidden');
+        }
+
+        function copyToClipboard(text, buttonElement) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text.replace(/<br\s*\/?>/gi, '\n'); 
+            textarea.style.position = 'fixed'; 
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showCopySuccess(buttonElement);
+            } catch (err) {
+                console.error('Falha ao copiar texto: ', err);
+                const originalText = buttonElement.textContent;
+                buttonElement.textContent = 'Erro!';
+                setTimeout(() => { buttonElement.textContent = originalText; }, 2000);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function showCopySuccess(buttonElement) {
+            const originalText = buttonElement.textContent;
+            buttonElement.textContent = 'Copiado!';
+            buttonElement.classList.add('bg-green-500', 'hover:bg-green-600');
+            buttonElement.classList.remove('bg-gray-600', 'hover:bg-gray-700');
+            setTimeout(() => {
+                buttonElement.textContent = originalText;
+                buttonElement.classList.remove('bg-green-500', 'hover:bg-green-600');
+                buttonElement.classList.add('bg-gray-600', 'hover:bg-gray-700');
+            }, 2000);
+        }
+
+        function generatePromptText(data) {
+            const { charName, charUniverse, plotType, emotionalTone, location, keyObject, variation } = data;
+            
+            const plotMap = {
+                'aventura': `onde ${charName} precisa resgatar alguém ou encontrar um item raro.`,
+                'luta': `onde ${charName} está enfrentando um inimigo poderoso.`,
+                'desafio': `onde ${charName} precisa superar um grande obstáculo físico.`,
+                'competicao': `onde ${charName} está em uma competição acirrada contra um rival.`,
+                'misterio': `onde ${charName} precisa resolver um enigma.`,
+                'sacrificio': `onde ${charName} precisa fazer uma escolha difícil.`,
+                'brincadeira': `onde uma brincadeira sai do controle.`,
+                'meme': `onde ${charName} reage a uma situação engraçada do universo ${charUniverse}.`
+            };
+            const toneMap = { 'epico': 'um tom sério e épico', 'comico': 'um tom cômico e exagerado', 'emocionante': 'um tom emocionante', 'suspense': 'um tom de suspense' };
+
+            let context = '';
+            if (location) context += `\n**LOCAL:** A história se passa em ${location}.`;
+            if (keyObject) context += `\n**ELEMENTO-CHAVE:** O diálogo deve girar em torno de ${keyObject}.`;
+
+            let variationText = '';
+            if (variation === 'twist') variationText = '\n**VARIAÇÃO:** Adicione uma reviravolta inesperada na conversa.';
+            else if (variation === 'toneShift') {
+                const newToneKey = Object.keys(toneMap).filter(t => t !== emotionalTone)[Math.floor(Math.random() * 3)];
+                variationText = `\n**VARIAÇÃO:** Conte a história com um tom diferente: ${toneMap[newToneKey]}.`;
+            } else if (variation === 'coStar') variationText = `\n**VARIAÇÃO:** Adicione um personagem inesperado de ${charUniverse} para participar do diálogo.`;
+
+            const basePrompt = `Você é um roteirista especialista em criar diálogos para vídeos virais. Crie um roteiro de 60 segundos contendo APENAS FALAS. A história deve ser compreensível apenas pelo diálogo.
+
+**PERSONAGEM PRINCIPAL:** ${charName} (${charUniverse})
+**ENREDO:** ${plotMap[plotType]}
+**TOM:** ${toneMap[emotionalTone]}${context}${variationText}
+
+**REGRAS DE FORMATAÇÃO E ESTILO (MUITO IMPORTANTE):**
+
+* **FORMATO OBRIGATÓRIO:** O roteiro deve conter APENAS falas. Não inclua descrições de cena, ações ou qualquer outra coisa. Siga estritamente o formato:
+    NOME DO PERSONAGEM EM MAIÚSCULAS: [fala em letras minúsculas]
+    Exemplo: GOKU: eu não acredito que você comeu o último pedaço de pizza, vegeta!
+
+* **Impacto:** A história deve prender o leitor a cada segundo. Cada fala deve causar um impacto e avançar a narrativa de forma significativa.
+
+* **Linguagem Coloquial:** Use linguagem informal e gírias (quando apropriado ao personagem) para gerar humor e identificação.
+
+* **Interação com o Público:** No clímax da conversa, o personagem principal (${charName}) DEVE pedir diretamente para o público se inscrever no canal para que ele possa resolver a situação ou vencer o argumento.
+
+* **Coerência:** A história completa, com começo, meio e fim, deve ser contada e entendida exclusivamente através dos diálogos.
+
+* **Regra para Criaturas:** Se o personagem for um animal ou monstro que não fala, ele deve se expressar verbalmente como um humano no roteiro.
+
+Comece o roteiro de diálogos imediatamente.`;
+
+            return basePrompt;
+        }
+
+        function generateImagePrompt(data) {
+            const { charName, charUniverse, location } = data;
+            
+            let locationInfo = location ? ` O cenário principal é ${location}.` : '';
+
+            const masterPrompt = `Aja como um especialista em engenharia de prompts para IAs de geração de imagem (Midjourney, DALL-E). Sua tarefa é criar prompts de imagem em <strong>INGLÊS</strong>, ultra-detalhados e focados no <strong>ESTILO ANIME</strong>, baseados no cenário que descreverei a seguir.<br><br>Para o cenário, forneça <strong>3 OPÇÕES de prompt distintas</strong>, explorando diferentes estéticas de anime.<br><br><strong>Cenário:</strong> ${charName} do universo ${charUniverse}.${locationInfo}<br><br><strong>Formato da Resposta:</strong><br>OPÇÃO 1 (Ex: Estilo Anos 90): [Seu prompt em inglês aqui]<br>OPÇÃO 2 (Ex: Estilo Moderno/Mappa): [Seu prompt em inglês aqui]<br>OPÇÃO 3 (Ex: Estilo Fantasia/Ghibli): [Seu prompt em inglês aqui]<br><br><strong>Regras para os prompts:</strong><br>• <strong>Idioma:</strong> Sempre em INGLÊS.<br>• <strong>Estilo de Arte:</strong> Explore variações DENTRO do universo anime. Exemplos: "90s retro anime aesthetic", "modern dark fantasy anime style, like Jujutsu Kaisen", "painterly and soft anime style, like Studio Ghibli", "sharp and vibrant shonen anime art".<br>• <strong>Detalhes:</strong> Inclua iluminação (ex: cinematic lighting, god rays), composição (ex: dynamic angle, close-up shot) e emoção.<br>• <strong>Personagem Principal:</strong> O foco é <strong>${charName}</strong>. Mantenha a consistência visual dele dentro do estilo proposto.<br><br>Crie as 3 opções de prompt para o cenário descrito.`;
+
+            return masterPrompt;
+        }
+
+    </script>
+</body>
+</html>
